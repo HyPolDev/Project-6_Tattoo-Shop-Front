@@ -71,9 +71,8 @@ export const Register = () => {
       <div className="registerDesign">
         {/* <pre>{JSON.stringify(user, null, 2)}</pre> */}
         <CInput
-          className={`inputDesign ${
-            userError.nameError !== "" ? "inputDesignError" : ""
-          }`}
+          className={`inputDesign ${userError.nameError !== "" ? "inputDesignError" : ""
+            }`}
           type={"text"}
           placeholder={"name"}
           name={"name"}
@@ -83,9 +82,8 @@ export const Register = () => {
         />
         <div className="error">{userError.nameError}</div>
         <CInput
-          className={`inputDesign ${
-            userError.emailError !== "" ? "inputDesignError" : ""
-          }`}
+          className={`inputDesign ${userError.emailError !== "" ? "inputDesignError" : ""
+            }`}
           type={"email"}
           placeholder={"email"}
           name={"email"}
@@ -95,9 +93,8 @@ export const Register = () => {
         />
         <div className="error">{userError.emailError}</div>
         <CInput
-          className={`inputDesign ${
-            userError.passwordError !== "" ? "inputDesignError" : ""
-          }`}
+          className={`inputDesign ${userError.passwordError !== "" ? "inputDesignError" : ""
+            }`}
           type={"password"}
           placeholder={"password"}
           name={"password"}

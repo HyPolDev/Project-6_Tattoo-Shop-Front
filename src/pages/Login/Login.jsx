@@ -10,16 +10,16 @@ import { Header } from "../../common/Header/Header";
 
 
 export const Login = () => {
-  const datosUser = JSON.parse(localStorage.getItem("passport"));
+  const userData = JSON.parse(localStorage.getItem("passport"));
   const navigate = useNavigate();
-  const [tokenStorage, setTokenStorage] = useState(datosUser?.token);
+  const [tokenStorage, setTokenStorage] = useState(userData?.token);
 
-  const [credenciales, setCredenciales] = useState({
+  const [credentials, setCredentials] = useState({
     email: "",
     password: "",
   });
 
-  const [credencialesError, setCredencialesError] = useState({
+  const [credentialsError, setCredentialsError] = useState({
     emailError: "",
     passwordError: "",
   });
@@ -33,7 +33,7 @@ export const Login = () => {
   }, [tokenStorage]);
 
   const inputHandler = (e) => {
-    setCredenciales((prevState) => ({
+    setCredentials((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }));
@@ -42,22 +42,21 @@ export const Login = () => {
   const checkError = (e) => {
     const error = validame(e.target.name, e.target.value);
 
-    setCredencialesError((prevState) => ({
+    setCredentialsError((prevState) => ({
       ...prevState,
       [e.target.name + "Error"]: error,
-      //el truco del almendruco nos dice que seria... nameError: error, o emailError: error
     }));
   };
 
   const loginMe = async () => {
     try {
-      for (let elemento in credenciales) {
-        if (credenciales[elemento] === "") {
-          throw new Error("Todos los campos tienen que estar rellenos");
+      for (let elemento in credentials) {
+        if (credentials[elemento] === "") {
+          throw new Error("All fields must be filled ");
         }
       }
-
-      const fetched = await LoginUser(credenciales);
+      console.log("0");
+      const fetched = await LoginUser(credentials);
 
       const decodificado = decodeToken(fetched.token);
 
@@ -69,9 +68,9 @@ export const Login = () => {
       localStorage.setItem("passport", JSON.stringify(passport));
 
       setMsgError(
-        `Hola ${decodificado.name}, bienvenido de nuevo a este infierno`
+        ""
       );
-
+      console.log("2");
       setTimeout(() => {
         navigate("/");
       }, 2000);
@@ -85,31 +84,29 @@ export const Login = () => {
       <Header />
       <div className="loginDesign">
         <CInput
-          className={`inputDesign ${
-            credencialesError.emailError !== "" ? "inputDesignError" : ""
-          }`}
+          className={`inputDesign ${credentialsError.emailError !== "" ? "inputDesignError" : ""
+            }`}
           type={"email"}
           placeholder={"email"}
           name={"email"}
           disabled={""}
-          value={credenciales.email || ""}
+          value={credentials.email || ""}
           onChangeFunction={(e) => inputHandler(e)}
           onBlurFunction={(e) => checkError(e)}
         />
-        <div className="error">{credencialesError.emailError}</div>
+        <div className="error">{credentialsError.emailError}</div>
         <CInput
-          className={`inputDesign ${
-            credencialesError.passwordError !== "" ? "inputDesignError" : ""
-          }`}
+          className={`inputDesign ${credentialsError.passwordError !== "" ? "inputDesignError" : ""
+            }`}
           type={"password"}
           placeholder={"password"}
           name={"password"}
           disabled={""}
-          value={credenciales.password || ""}
+          value={credentials.password || ""}
           onChangeFunction={(e) => inputHandler(e)}
           onBlurFunction={(e) => checkError(e)}
         />
-        <div className="error">{credencialesError.passwordError}</div>
+        <div className="error">{credentialsError.passwordError}</div>
 
         <CButton
           className={"cButtonDesign"}
