@@ -35,10 +35,8 @@ export const LoginUser = async (credentials) => {
 
   try {
 
-    console.log("is in try");
-    console.log(options);
     const response = await fetch(`${root}auth/login`, options);
-    console.log(response);
+
     const data = await response.json();
 
     if (!data.success) {

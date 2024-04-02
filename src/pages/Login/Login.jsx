@@ -55,14 +55,14 @@ export const Login = () => {
           throw new Error("All fields must be filled ");
         }
       }
-      console.log("0");
+
       const fetched = await LoginUser(credentials);
 
-      const decodificado = decodeToken(fetched.token);
+      const decoded = decodeToken(fetched.token);
 
       const passport = {
         token: fetched.token,
-        decodificado: decodificado,
+        decoded: decoded,
       };
 
       localStorage.setItem("passport", JSON.stringify(passport));
@@ -70,9 +70,14 @@ export const Login = () => {
       setMsgError(
         ""
       );
-      console.log("2");
+      console.log(decoded)
       setTimeout(() => {
-        navigate("/");
+        if (decoded.roleName != "user") {
+          navigate("/admin-panel");
+        }
+        else {
+          navigate("/appointments")
+        }
       }, 2000);
     } catch (error) {
       setMsgError(error.message);
