@@ -3,10 +3,12 @@
   width: 18em;
 
   border: 0.2em solid black;
-  border-radius: 0.5em;
   margin: 1em;
+  font-weight: bold;
+  background-color: #1f1e1e;
+  color: white;
 }
 
 .inputDesignError {
-  border: 0.2em solid red;
+  border: 0.13em solid crimson;
 }

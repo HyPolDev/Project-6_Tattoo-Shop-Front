@@ -1,14 +1,19 @@
 .headerDesign {
-
-    height:12vh;
+    height: 12vh;
     width: 100vw;
 
-    background-color: darkcyan;
+    background-color: black;
+    color: whitesmoke;
+    font-size: large;
+    font-weight: bold;
+    text-transform: uppercase;
 
     display: flex;
     flex-direction: row;
-    justify-content: flex-end;
-    align-items: flex-end;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 1000;
 }
 
 .authMenu {

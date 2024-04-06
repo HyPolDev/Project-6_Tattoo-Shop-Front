@@ -1,36 +1,39 @@
 import { Navigator } from "../Navigator/Navigator";
 import { useNavigate } from "react-router-dom";
-import "./Header.css";
+import "./Header.css"
+
 
 export const Header = () => {
-  const navigate = useNavigate();
-  const passport = JSON.parse(localStorage.getItem("passport"));
-
+  const navigate = useNavigate()
+  const passport = JSON.parse(localStorage.getItem("passport"))
+  const role = passport?.decodificado.roleName
   const logOut = () => {
-    localStorage.removeItem("passport");
-    navigate("/login");
-  };
-
+    localStorage.removeItem("passport")
+    navigate("/login")
+  }
   return (
     <div className="headerDesign">
-      <Navigator title={"home"} destination={"/"} />
+      <h1>Tattoo Shop</h1>
 
-      {passport?.token ? (
+      <Navigator title={"Home"} destination={"/"} />
+      <Navigator title={"services"} destination={"/services"} />
+      {passport ? (
         <div className="authMenu">
-          <Navigator
-            title={passport?.decoded?.name}
-            destination={"/profile"}
-          />
+          <Navigator title={"my appointments"} destination={"/appointments"} />
+          <Navigator title={passport.decodificado.userName} destination={"/profile"} />
+          {role == "superadmin" || role == "admin" ? (
+            <Navigator title={"ADMINISTRACION"} destination={"/superadmin"} />
+          ) : <></>}
           <div onClick={logOut}>
-            <Navigator title={"log out"} destination={"/"} />
+            <Navigator title={"Log out"} destination={"/"} />
           </div>
-        </div>
-      ) : (
+        </div>) : (
         <div className="authMenu">
-          <Navigator title={"register"} destination={"/register"} />
-          <Navigator title={"login"} destination={"/login"} />
+          <Navigator title={"Register"} destination={"/register"} />
+          <Navigator title={"Login"} destination={"/login"} />
         </div>
       )}
+
     </div>
-  );
-};
+  )
+}
