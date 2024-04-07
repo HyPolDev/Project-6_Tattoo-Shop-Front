@@ -1,261 +1,145 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "./appointments.css";
-import { GetAppointments, GetServices, GetProfile, DeleteAppointment, UpdateProfile } from "../../services/apiCalls";
-import { PopUpAppointment } from "../../common/PopUpAppointment/PopUpAppointment";
-import { Table } from "react-bootstrap";
-import { EntryActionButton } from "../../common/EntryActionButton/EntryActionButton";
-import { PopUpVerifyAction } from "../../common/PopUpVerifyAction/PopUpVerifyAction";
-import { FormatDate } from "../../utils/formatDate";
+import "./Appointments.css"
+import { DeleteUserAppointments, GetAppointments, PostAppointments } from "../../services/apiCalls";
+import { CInput } from "../../common/CInput/CInput";
+import { validame } from "../../utils/function";
+import { CButton } from "../../common/CButton/CButton";
+import { AppointmentsCard } from "../../components/AppointmentsCard/AppoinmentsCard";
+import { Header } from "../../common/Header/Header";
 
-export const UserAppointments = () => {
-    const passport = JSON.parse(localStorage.getItem("passport"));
-    const [tokenStorage, setTokenStorage] = useState(passport?.token);
-    const [userAppointments, setUserAppointments] = useState(undefined);
-    const [loadedData, setLoadedData] = useState(false);
-    const [loadedServicesData, setLoadedServicesData] = useState(false);
-    const [modalShow, setModalShow] = useState(false);
-    const [verificationModal, setVerificationModal] = useState(false);
-    const [updateModal, setUpdateModal] = useState(false);
-    const [services, setServices] = useState([]);
-    const [appointments, setAppointments] = useState([]);
-    const [idAppInteracted, setIdAppInteracted] = useState(0);
-    const [indexAppToDelete, setIndexAppToDelete] = useState(0);
-    const [itemToUpdate, setItemToUpdate] = useState({});
+export const Appointments = () => {
+    const navigate = useNavigate()
+    const datosUser = JSON.parse(localStorage.getItem("passport"))
+    const [tokenStorage, setTokenStorage] = useState(datosUser?.token)
+    const [appointments, setAppointments] = useState([])
+    const [appointmentsData, setAppointmentsData] = useState({
+        service_id: "",
+        appointment_date: ""
+    })
 
-    const navigate = useNavigate();
+    const [appointmentsDataError, setAppointmentsDataError] = useState({
+        service_idError: "",
+        appointmentDateError: "",
+        appointmentIdError: "",
+    })
 
+    const [msgError, setMsgError] = useState("")
+
+
+    const InputHandler = (e) => {
+
+
+        setAppointmentsData((prevState) => ({
+            ...prevState,
+            [e.target.name]: e.target.value
+        }))
+    }
+
+    const checkError = (e) => {
+        const error = validame(e.target.name, e.target.value)
+
+        setAppointmentsDataError((prevState) => ({
+            ...prevState,
+            [e.target.name + "Error"]: error,
+        }))
+    }
+
+    const [write, setWrite] = useState("disabled")
+    const [loadedData, setLoadedData] = useState(true)
     useEffect(() => {
-        if (!tokenStorage) {
-            navigate("/")
-        }
-    }, [tokenStorage])
-
-    useEffect(() => {
-        const getUserAppointments = async () => {
+        const RecoverData = async () => {
             try {
-                const fetched = await GetAppointments(tokenStorage)
-                setLoadedData(true)
-                setUserAppointments(fetched.data)
-                if (fetched.data.length > 0) {
-                    setAppointments(fetched.data)
-                }
+                const fetched = await GetAppointments(tokenStorage);
+                setAppointments(fetched.data);
             } catch (error) {
-                console.log(error)
+                setMsgError(error.message);
             }
+        };
+        if (appointments?.length === 0) {
+            RecoverData();
         }
+    }, [appointments, tokenStorage]);
 
-        const getServicesData = async () => {
-            try {
-                const fetchedServices = await GetServices();
-                setLoadedServicesData(true);
-                setServices(fetchedServices.data)
-            } catch (error) {
-                console.log(error)
+    const putAppointment = async () => {
+        try {
+            const fetched = await PostAppointments(tokenStorage, appointmentsData);
+
+            if (fetched.success) {
+                window.location.reload()
+                navigate("/appointments");
+            } else {
+                console.error(fetched.message);
             }
+        } catch (error) {
+            console.error(error);
+            setMsgError(error.message);
         }
+    };
 
-        const getTattooersData = async () => {
-            try {
-                const fetchedTattoers = await GetTattoers(tokenStorage)
-                setLoadedTattoersData(true)
-                setTattoers(fetchedTattoers.data)
-            } catch (error) {
-                console.log(error)
-            }
-        }
-
-        const getEstablishmentsData = async () => {
-            try {
-                const fetchedServices = await GetEstablishments()
-                setLoadedEstablishmentsData(true)
-                setEstablishments(fetchedServices.data)
-            } catch (error) {
-                console.log(error)
-            }
-        }
-
-        if (!loadedData) { getUserAppointments() }
-        if (!loadedServicesData) { getServicesData() }
-        if (!loadedTattoersData) { getTattooersData() }
-        if (!loadedEstablishmentsData) { getEstablishmentsData() }
-    }, [])
-
-    const popupAddAppointment = () => {
-        setModalShow(true)
+    const deleteAppointment = async (tokenStorage, appointmentId) => {
+        try {
+            const fetched = await DeleteUserAppointments(tokenStorage, appointmentId)
+            setAppointments(fetched.data)
+        } catch (error) {
+            setMsgError(error.message);
+        } const updatedAppointments = appointments.filter(appointment => appointment.id !== appointmentId);
+        setAppointments(updatedAppointments);
     }
 
-    const closingAddAppointment = () => {
-        setModalShow(false)
-        if (localStorage.getItem("createdAppointment")) {
-            const newAppointment = JSON.parse(localStorage.getItem("createdAppointment"))
-            let newAppointmentDate = newAppointment.appointmentDate
-            newAppointmentDate += "Z"
-            newAppointment.appointmentDate = newAppointmentDate
-            if (newAppointment) {
-                if (appointments.length > 0) {
-                    const allAppointments = appointments
-                    let pushed = false
-                    for (let i = 0; i < allAppointments.length; i++) {
-                        const dateToCompare = allAppointments[i].appointmentDate
-                        if (dateToCompare >= newAppointmentDate) {
-                            allAppointments.splice(i, 0, newAppointment)
-                            setAppointments(allAppointments)
-                            localStorage.removeItem("createdAppointment")
-                            pushed = true
-                            break
-                        }
-                    }
-                    if (!pushed) {
-                        allAppointments.push(newAppointment)
-                        setAppointments(allAppointments)
-                        localStorage.removeItem("createdAppointment")
-                        pushed = true
-                    }
-                } else {
-                    const allAppointments = appointments
-                    allAppointments.push(newAppointment)
-                    setAppointments(allAppointments)
-                    localStorage.removeItem("createdAppointment")
-                }
-            }
-        }
-    }
 
-    const closingVerifyDelete = () => {
-        setIdAppInteracted(0)
-        setIndexAppToDelete(0)
-        setVerificationModal(false)
-    }
-
-    const verifyDeleteAction = (id, index) => {
-        setIdAppInteracted(id)
-        setIndexAppToDelete(index)
-        setVerificationModal(true)
-    }
-
-    const deleteAppointment = async () => {
-        if (idAppInteracted !== 0) {
-            try {
-                const fetched = await DeleteAppointment(tokenStorage, idAppInteracted)
-                if (fetched.success === false) {
-                    throw new Error(fetched.error)
-                }
-                setAppointments(appointments.filter((item, i) => i !== indexAppToDelete))
-                setIdAppInteracted(0)
-                setIndexAppToDelete(0)
-                setVerificationModal(false)
-            } catch (error) {
-                console.log(error)
-            }
-        }
-    }
-
-    const activateUpdateAction = (item) => {
-        setItemToUpdate(item)
-        setUpdateModal(true)
-    }
-
-    const closingUpdateAppointment = () => {
-        setUpdateModal(false)
-        if (localStorage.getItem("updatedAppointment")) {
-            const appointmentUpdated = JSON.parse(localStorage.getItem("updatedAppointment"))
-            appointmentUpdated.appointmentDate += "Z"
-            appointments.map((item, index) => {
-                if (item === itemToUpdate) {
-                    appointments[index] = appointmentUpdated
-                }
-            })
-            localStorage.removeItem("updatedAppointment")
-        }
-    }
 
     return (
-        <div className="userAppointmentsDesign">
-            <div className="userAppointmentsContent">
+        <>
+            <Header />
+            <div className="appointmentsDesign">
 
-                <>
-                    <div className="buttonsSectionApp">
-                        <button className="newAppointmentBtn" onClick={popupAddAppointment}>
-                            New <i className="bi bi-calendar-plus calendarIcon"></i>
-                        </button>
-                    </div>
-                    <div className="appointmentsContent">
-                        <Table responsive striped variant="dark">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Date</th>
-                                    <th>Establishment</th>
-                                    <th>Service</th>
-                                    <th>Tattooer</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {appointments.length === 0 ? (
-                                    <tr key={"no-values"}>
-                                        <td colSpan={6}>No appointments for this user</td>
-                                    </tr>
-                                ) : (
-                                    appointments.map((item, index) => {
-                                        return (
-                                            <tr key={index}>
-                                                <td>{index}</td>
-                                                <td>{FormatDate(item.appointmentDate)}</td>
-                                                <td>{item.establishment.address}</td>
-                                                <td>{item.service.serviceName}</td>
-                                                <td>{item.tattooer.fullname}</td>
-                                                <td className="buttonSection">
-                                                    <EntryActionButton
-                                                        className={"editButton"}
-                                                        buttonIcon={"pencil-square"}
-                                                        onClickFunction={() => activateUpdateAction(item)}
-                                                    />
-                                                    <EntryActionButton
-                                                        className={"deleteButton"}
-                                                        buttonIcon={"trash"}
-                                                        onClickFunction={() => verifyDeleteAction(item.id, index)}
-                                                    />
-                                                </td>
-                                            </tr>
-                                        )
-                                    })
-                                )}
-                            </tbody>
-                        </Table>
-                    </div>
-                </>
+                {!loadedData
+                    ? (<div>LOADING</div>)
+                    : (<div>
+                        <p>Book now:</p>
+                        <CInput
+                            className={`inputDesign ${appointmentsDataError.appointmentDateError !== "" ? "inputDesignError" : ""}`}
+                            type={"date"}
+                            placeholder={""}
+                            name={"appointment_date"}
+                            value={appointmentsData.appointment_date || ""}
+                            onChangeFunction={(e) => InputHandler(e)}
+                            onBlurFunction={(e) => checkError(e)}
+                        />
+                        <CInput
+                            className={`inputDesign ${appointmentsDataError.service_idError !== "" ? "inputDesignError" : ""}`}
+                            type={"text"}
+                            placeholder={"Service name"}
+                            name={"service_id"}
+                            value={appointmentsData.service_id || ""}
+                            onChangeFunction={(e) => InputHandler(e)}
+                            onBlurFunction={(e) => checkError(e)}
+                        />
+                        <CButton
+                            className={write === "" ? "cButtonGreen cButtonDesign" : "cButtonDesign"}
+                            title={write === "" ? "Confirmar" : "Book"}
+                            functionEmit={write === "" ? putAppointment : () => setWrite("")}
+                        />
+                    </div>)
+                }
+                {appointments?.length > 0 ? (
+                    <>
+                        <p>Your appointments:</p>
+                        {appointments.map(appointment => (
+                            <AppointmentsCard
+                                key={appointment.id}
+                                service_id={appointment.serviceId}
+                                appointmentDate={appointment.appointmentDate}
+                                appointmentId={appointment.id}
+                                onDelete={() => deleteAppointment(tokenStorage, appointment.id)}
+                            />
+                        ))}
+                    </>
+                ) : (
+                    <p>No tienes citas programadas.</p>
+                )}
             </div>
-            {modalShow && (
-                <PopUpAppointment
-                    show={modalShow}
-                    onHide={closingAddAppointment}
-                    services={services}
-                    tattooers={tattooers}
-                    establishments={establishments}
-                    type={"Create"}
-                />
-            )}
-            {verificationModal && (
-                <PopUpVerifyAction
-                    show={verificationModal}
-                    onHide={closingVerifyDelete}
-                    confirm={deleteAppointment}
-                    entity={"appointment"}
-                />
-            )}
-            {updateModal && (
-                <PopUpAppointment
-                    show={updateModal}
-                    onHide={closingUpdateAppointment}
-                    services={services}
-                    tattooers={tattooers}
-                    establishments={establishments}
-                    item={itemToUpdate}
-                    type={"Update"}
-                />
-            )}
-        </div>
-    )
+        </>
+    );
 }
