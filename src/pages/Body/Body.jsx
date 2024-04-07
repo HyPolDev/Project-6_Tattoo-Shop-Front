@@ -5,7 +5,7 @@ import { Login } from "../Login/Login";
 import { Profile } from "../Profile/Profile";
 import { Services } from "../Services/Services";
 import { SuperAdminPanel } from "../../pages/SuperAdmin/SuperAdmin";
-import { Appointments } from "../Appointments/Appointments";
+import { Appointments } from "../Appointments/appointments";
 
 export const Body = () => {
   return (

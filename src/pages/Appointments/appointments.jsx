@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Appointments.css"
+import "./appointments.css"
 import { DeleteUserAppointments, GetAppointments, PostAppointments } from "../../services/apiCalls";
 import { CInput } from "../../common/CInput/CInput";
 import { validame } from "../../utils/function";
