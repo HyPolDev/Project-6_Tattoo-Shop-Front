@@ -3,6 +3,9 @@ Hello, welcome to the tattoo shop front end, its the 6th project at GeeksHubs Ac
 The navigation is very simple, just loggin or register if you dont have an account select a service and create an appointment.
 <br>
 <img src="./src/img/DBimg.png" alt="gif_page" style="height: 10em ; width: 30em; left: 1em; transition: 0.7s">
+<img src="./src/img/Appointments.png" alt="gif_page" style="height: 10em ; width: 30em; left: 1em; transition: 0.7s">
+<img src="./src/img/login.png" alt="gif_page" style="height: 10em ; width: 30em; left: 1em; transition: 0.7s">
+<img src="./src/img/Services.png" alt="gif_page" style="height: 10em ; width: 30em; left: 1em; transition: 0.7s">
 <br>
 🛠️FRONT-END STACK:<br/><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" /><img src= "https://img.shields.io/badge/javascipt-EFD81D?style=for-the-badge&logo=javascript&logoColor=black" alt="Docker" /><img src= "https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
 
@@ -18,7 +21,18 @@ Before installing make sure you already have the backend and database from the  
 2.  Clone this repository
 3.  Run ` $ npm install ` in terminal
 4.  `$ npm run dev`
+5.  Remember to clean your local storage since it does not use Redux
 
+###### Admin Credentials
+  - email: admin@admin.com
+  - password: 123456
+
+###### Possible appointments:
+   "tatuajes personalizados",
+    "tatuajes de catalogo",
+    "restauración",
+    "piercings y dilataciones",
+    "venta"
 ## ✒️ Autor
 
 - **Pol Montero** - Project Developer
