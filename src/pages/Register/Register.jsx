@@ -1,91 +1,96 @@
 import { useState } from "react";
+import "./Register.css"
 import { CInput } from "../../common/CInput/CInput";
-import "./Register.css";
 import { CButton } from "../../common/CButton/CButton";
 import { RegisterUser } from "../../services/apiCalls";
-import { validame } from "../../utils/functions";
+import { validame } from "../../utils/function";
 import { useNavigate } from "react-router-dom";
 import { Header } from "../../common/Header/Header";
 
 export const Register = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const [user, setUser] = useState({
-    name: "",
+    first_name: "",
+    last_name: "",
     email: "",
-    password: "",
-  });
+    password: ""
+  })
 
   const [userError, setUserError] = useState({
-    nameError: "",
+    first_nameError: "",
+    last_nameError: "",
     emailError: "",
-    passwordError: "",
-  });
+    passwordError: ""
+  })
 
-  const [msgError, setMsgError] = useState("");
+  const [msgError, setMsgError] = useState("")
 
-  //funcion emit que está aqui en el padre... que se la pasamos al custom input
   const inputHandler = (e) => {
-    //voy a proceder a bindear....
     setUser((prevState) => ({
       ...prevState,
-      [e.target.name]: e.target.value,
-    }));
-  };
+      [e.target.name]: e.target.value
+    }))
+  }
 
   const checkError = (e) => {
-    const error = validame(e.target.name, e.target.value);
+    const error = validame(e.target.name, e.target.value)
 
     setUserError((prevState) => ({
       ...prevState,
       [e.target.name + "Error"]: error,
-      //el truco del almendruco nos dice que seria... nameError: error, o emailError: error
-    }));
-  };
+    }))
+  }
 
-  //function emit que también está aqui en el padre...en este caso para registrar...
   const registerMe = async () => {
     try {
       for (let elemento in user) {
         if (user[elemento] === "") {
-          throw new Error("Todos los campos tienen que estar rellenos");
+          throw new Error("All fields must be filled out")
         }
       }
+      const fetched = await RegisterUser(user)
 
-      const fetched = await RegisterUser(user);
-
-      console.log(fetched);
-      setMsgError(fetched.message);
-
+      setMsgError(fetched.message)
       setTimeout(() => {
-        navigate("/");
-      }, 1200);
-    } catch (error) {
-      setMsgError(error.message);
-    }
-  };
+        navigate("/login")
+      }, 1200)
 
+    } catch (error) {
+      setMsgError(error.message)
+    }
+  }
   return (
     <>
       <Header />
       <div className="registerDesign">
-        {/* <pre>{JSON.stringify(user, null, 2)}</pre> */}
         <CInput
-          className={`inputDesign ${userError.nameError !== "" ? "inputDesignError" : ""
+          className={`inputDesign ${userError.first_nameError !== "" ? "inputDesignError" : ""
             }`}
           type={"text"}
-          placeholder={"name"}
-          name={"name"}
-          value={user.name || ""}
+          placeholder={"First name"}
+          name={"first_name"}
+          value={user.first_name || ""}
           onChangeFunction={(e) => inputHandler(e)}
           onBlurFunction={(e) => checkError(e)}
         />
-        <div className="error">{userError.nameError}</div>
+        <div className="error">{userError.first_nameError}</div>
+        <CInput
+          className={`inputDesign ${userError.last_nameError !== "" ? "inputDesignError" : ""
+            }`}
+          type={"text"}
+          placeholder={"Last name"}
+          name={"last_name"}
+          value={user.last_name || ""}
+          onChangeFunction={(e) => inputHandler(e)}
+          onBlurFunction={(e) => checkError(e)}
+        />
+        <div className="error">{userError.last_nameError}</div>
         <CInput
           className={`inputDesign ${userError.emailError !== "" ? "inputDesignError" : ""
             }`}
           type={"email"}
-          placeholder={"email"}
+          placeholder={"Email"}
           name={"email"}
           value={user.email || ""}
           onChangeFunction={(e) => inputHandler(e)}
@@ -96,7 +101,7 @@ export const Register = () => {
           className={`inputDesign ${userError.passwordError !== "" ? "inputDesignError" : ""
             }`}
           type={"password"}
-          placeholder={"password"}
+          placeholder={"Password"}
           name={"password"}
           value={user.password || ""}
           onChangeFunction={(e) => inputHandler(e)}
@@ -111,5 +116,5 @@ export const Register = () => {
         <div className="error">{msgError}</div>
       </div>
     </>
-  );
-};
+  )
+}
