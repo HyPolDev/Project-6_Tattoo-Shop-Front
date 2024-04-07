@@ -1,7 +1,9 @@
 # Tattoo Shop  React Frontend
 Hello, welcome to the tattoo shop front end, its the 6th project at GeeksHubs Academy consisting in the frontent made with React of the 4th project.<br>
 The navigation is very simple, just loggin or register if you dont have an account select a service and create an appointment.
+<br>
 <img src="./src/img/DBimg.png" alt="gif_page" style="height: 10em ; width: 30em; left: 1em; transition: 0.7s">
+<br>
 🛠️FRONT-END STACK:<br/><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" /><img src= "https://img.shields.io/badge/javascipt-EFD81D?style=for-the-badge&logo=javascript&logoColor=black" alt="Docker" /><img src= "https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
 
 
