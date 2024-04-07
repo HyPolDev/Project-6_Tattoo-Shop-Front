@@ -1,14 +1,7 @@
 .registerDesign {
     height: 88vh;
     width: 100vw;
-
-
-    /* background-image: url(../../img/tatooStudio.jpg); */
     color: white;
-    background-color: #3c3c3c;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
 
     display: flex;
     flex-direction: column;

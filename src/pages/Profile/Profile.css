@@ -1,16 +1,9 @@
 .profileDesign {
     height: 88vh;
     width: 100vw;
-
-    /* background-image: url(../../img/tatooStudio.jpg); */
     color: black;
     font-size: larger;
     font-weight: bold;
-    text-shadow: 2px 2px 4px #000000;
-    background-color: #3c3c3c;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
 
     display: flex;
     flex-direction: column;

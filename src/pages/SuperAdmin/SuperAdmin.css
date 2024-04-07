@@ -2,15 +2,7 @@
     overflow: auto;
     height: 88vh;
     width: 100vw;
-
-    /* background-image: url(../../img/tatooStudio.jpg); */
-    background-color: #3c3c3c;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
     color: black;
-
-
     display: flex;
     flex-direction: column;
     justify-content: space-between;
