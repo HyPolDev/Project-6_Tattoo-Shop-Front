@@ -1,0 +1,38 @@
+.appoinmentsCardDesign {
+    height: 10em;
+    width: 20em;
+
+    margin: 0.2rem;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: 0.5s;
+    background-color: #131313;
+    color: white;
+}
+
+.appoinmentsCardDesign:hover {
+    cursor: pointer;
+    transition: 0.5s;
+    background-color: #18232d;
+}
+
+.deleteDesign {
+    height: 1.9em;
+    width: 8em;
+    margin-top: 2em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: red;
+    transition: 0.5s;
+
+}
+
+.deleteDesign:hover {
+    transition: 0.5s;
+    background-color: darkred;
+}
