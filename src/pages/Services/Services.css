@@ -2,8 +2,6 @@
     overflow: hidden;
     height: 88vh;
     width: 100vw;
-
-
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
