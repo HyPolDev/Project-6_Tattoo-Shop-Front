@@ -12,9 +12,9 @@ The navigation is very simple, just loggin or register if you dont have an accou
 Before installing make sure you already have the backend and database from the  project: [Here](https://github.com/HyPolDev/Tattoo-Shop_Week-4-Project)
 
 ##### Instalation (local)
-1.  Clone this repository
-2.  Run ` $ npm install ` in terminal
-3.  Connect repository with database 
+1.  Install the back 
+2.  Clone this repository
+3.  Run ` $ npm install ` in terminal
 4.  `$ npm run dev`
 
 ## ✒️ Autor
